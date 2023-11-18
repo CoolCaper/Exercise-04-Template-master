@@ -16,30 +16,33 @@ class Overworld extends Phaser.Scene {
     create() {
         // velocity constant
         this.VEL = 100
-
+        //tile map info
+        const map = this.add.tilemap('tilemapJSON')
         // add slime
-        this.slime = this.physics.add.sprite(32, 32, 'slime', 0)
+        this.slime = this.physics.add.sprite(map.widthInPixels / 2, 64, 'slime', 0)
         this.slime.body.setCollideWorldBounds(true)
         // tilemap set up
 
-        const map = this.add.tilemap('tilemapJSON')
         const tileset = map.addTilesetImage('tileset', 'tilesetImage')
         const bgLayer1 = map.createLayer('terrain', 'tileset', 0, 0)
         const bgLayer = map.createLayer('background', 'tileset', 0, 0)
 
         // slime animation
-        this.anims.create({
+        this.slime.anims.create({
             key: 'jiggle',
-            frameRate: 8,
+            frameRate: 2,
             repeat: -1,
             frames: this.anims.generateFrameNumbers('slime', {
-                start: 8,
+                start: 0,
                 end: 1
             })
         })
-        this.anims.play('jiggle');
+        this.slime.anims.play('jiggle');
         // input
         this.cursors = this.input.keyboard.createCursorKeys()
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        this.cameras.main.startFollow(this.slime, true, 0.25, 0.25)
+        this.physics.world.setBounds(map.widthInPixels, map.heightInPixels)
 
     }
 
