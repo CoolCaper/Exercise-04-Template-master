@@ -24,6 +24,7 @@ class Overworld extends Phaser.Scene {
 
         const map = this.add.tilemap('tilemapJSON')
         const tileset = map.addTilesetImage('tileset', 'tilesetImage')
+        const bgLayer1 = map.createLayer('terrain', 'tileset', 0, 0)
         const bgLayer = map.createLayer('background', 'tileset', 0, 0)
 
         // slime animation
