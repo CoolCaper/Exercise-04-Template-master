@@ -22,7 +22,7 @@ class Overworld extends Phaser.Scene {
         this.slime.body.setCollideWorldBounds(true)
         // tilemap set up
 
-        const map = this.add.tilemap('tileMapJSON')
+        const map = this.add.tilemap('tilemapJSON')
         const tileset = map.addTilesetImage('tileset', 'tilesetImage')
         const bgLayer = map.createLayer('background', 'tileset', 0, 0)
 
