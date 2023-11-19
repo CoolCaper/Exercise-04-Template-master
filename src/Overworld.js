@@ -16,16 +16,24 @@ class Overworld extends Phaser.Scene {
     create() {
         // velocity constant
         this.VEL = 100
-        //tile map info
-        const map = this.add.tilemap('tilemapJSON')
-        // add slime
-        this.slime = this.physics.add.sprite(map.widthInPixels / 2, 64, 'slime', 0)
-        this.slime.body.setCollideWorldBounds(true)
         // tilemap set up
-
+        const map = this.add.tilemap('tilemapJSON')
         const tileset = map.addTilesetImage('tileset', 'tilesetImage')
-        const bgLayer1 = map.createLayer('terrain', 'tileset', 0, 0)
-        const bgLayer = map.createLayer('background', 'tileset', 0, 0)
+        const background = map.createLayer('background', 'tileset', 0, 0)
+        const trees = map.createLayer('trees', 'tileset', 0, 0)
+        const terrain = map.createLayer('terrain', 'tileset', 0, 0)
+        // add slime
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        this.slime = this.physics.add.sprite(200, 200, 'slime', 0)
+        this.slime.body.setCollideWorldBounds(true)
+        trees.setCollisionByProperty({
+            collides:true
+        })
+        terrain.setCollisionByProperty({
+            collides:true
+        })
+        this.physics.add.collider(this.slime, trees)
+        this.physics.add.collider(this.slime, terrain)
 
         // slime animation
         this.slime.anims.create({
@@ -38,16 +46,19 @@ class Overworld extends Phaser.Scene {
             })
         })
         this.slime.anims.play('jiggle');
+        //cameras
+        this.cameras.main.startFollow(this.slime, true, 0.25, 0.25)
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        //terrain collision
         // input
         this.cursors = this.input.keyboard.createCursorKeys()
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
-        this.cameras.main.startFollow(this.slime, true, 0.25, 0.25)
-        this.physics.world.setBounds(map.widthInPixels, map.heightInPixels)
 
     }
 
     update() {
         // slime movement
+        console.log(this.slime.x)
+        //this.slime.x = 200;
         this.direction = new Phaser.Math.Vector2(0)
         if(this.cursors.left.isDown) {
             this.direction.x = -1
