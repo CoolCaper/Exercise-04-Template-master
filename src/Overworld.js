@@ -19,21 +19,14 @@ class Overworld extends Phaser.Scene {
         // tilemap set up
         const map = this.add.tilemap('tilemapJSON')
         const tileset = map.addTilesetImage('tileset', 'tilesetImage')
-        const background = map.createLayer('background', 'tileset', 0, 0)
-        const trees = map.createLayer('trees', 'tileset', 0, 0)
-        const terrain = map.createLayer('terrain', 'tileset', 0, 0)
+        const background = map.createLayer('background', tileset, 0, 0)
+        const trees = map.createLayer('trees', tileset, 0, 0)
+        const terrain = map.createLayer('terrain', tileset, 0, 0)
         // add slime
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        const slimeSpawn = map.findObject('Spawns', obj => obj.name === 'slimeSpawn')
         this.slime = this.physics.add.sprite(200, 200, 'slime', 0)
         this.slime.body.setCollideWorldBounds(true)
-        trees.setCollisionByProperty({
-            collides:true
-        })
-        terrain.setCollisionByProperty({
-            collides:true
-        })
-        this.physics.add.collider(this.slime, trees)
-        this.physics.add.collider(this.slime, terrain)
 
         // slime animation
         this.slime.anims.create({
@@ -50,6 +43,17 @@ class Overworld extends Phaser.Scene {
         this.cameras.main.startFollow(this.slime, true, 0.25, 0.25)
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
         //terrain collision
+        
+        terrain.setCollisionByProperty({
+            collides:true
+        })
+        
+        this.physics.add.collider(this.slime, terrain)
+        trees.setCollisionByProperty({
+            collides:true
+        })
+        
+        this.physics.add.collider(this.slime, trees)
         // input
         this.cursors = this.input.keyboard.createCursorKeys()
 
