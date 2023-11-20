@@ -10,7 +10,7 @@ class Overworld extends Phaser.Scene {
             frameHeight: 16
         })
         this.load.image('tilesetImage', 'tileset.png')
-        this.load.tilemapTiledJSON('tilemapJSON', 'overworld.json')
+        this.load.tilemapTiledJSON('tilemapJSON', 'Overworld.json')
     }
 
     create() {
